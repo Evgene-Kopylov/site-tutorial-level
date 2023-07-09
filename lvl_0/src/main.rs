@@ -1,3 +1,5 @@
+#![allow(unused)] // FIXME
+
 use macroquad::prelude::*;
 
 mod settings;
