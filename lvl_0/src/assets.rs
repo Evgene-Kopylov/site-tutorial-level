@@ -2,7 +2,6 @@ use macroquad::audio::{load_sound, Sound};
 use macroquad::prelude::{info, FileError};
 use macroquad::texture::{load_texture, Texture2D};
 
-// use crate::enemy_unit;
 
 
 pub(crate) struct Assets {
