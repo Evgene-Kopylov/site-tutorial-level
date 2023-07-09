@@ -1,0 +1,10 @@
+[package]
+name = "lvl_0_v01"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+macroquad = "0.3.26"
+quad-url = "0.1.1"
