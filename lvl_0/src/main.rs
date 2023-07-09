@@ -1,22 +1,32 @@
-#![allow(unused)] // FIXME!
+use macroquad::prelude::*;
 
 mod settings;
+use settings::*;
 
-use macroquad::prelude::{
-    clear_background,
-    next_frame,
-};
+mod projectile;
 
-use settings::{
-    GROUND_COLOR,
-};
+mod main_unit;
+mod target_unit;
+mod enemy_unit;
+mod scene;
+mod utils;
+mod assets;
+mod order;
+
+use main_unit::*;
+use crate::scene::Scene;
+use crate::target_unit::TargetUnit;
+use crate::enemy_unit::EnemyUnit;
 
 
 #[macroquad::main("breakout")]
 async fn main() {
+    let mut scene = Scene::new().await;
 
     loop {
+        scene.update();
         clear_background(GROUND_COLOR);
+        scene.draw();
         next_frame().await
     }
 }
