@@ -21,7 +21,7 @@ use crate::target_unit::TargetUnit;
 use crate::enemy_unit::EnemyUnit;
 
 
-#[macroquad::main("breakout")]
+#[macroquad::main(window_conf)]
 async fn main() {
     let mut scene = Scene::new().await;
 

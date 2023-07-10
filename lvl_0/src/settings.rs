@@ -1,4 +1,4 @@
-use macroquad::prelude::Color;
+use macroquad::prelude::{Color, Conf};
 
 
 pub const GROUND_COLOR: Color = Color::new(0.77, 0.8, 0.8, 1.00);
@@ -9,3 +9,13 @@ pub const MAIN_UNIT_SHOOT_DELAY: f32 = 0.1;
 pub const MAIN_UNIT_SHOOT_RANGE: f32 = 3000.;
 pub const MAIN_UNIT_SHOOT_SOUND_VOLUME: f32 = 0.16;
 pub const TARGET_UNIT_IMPACT_SOUND_VOLUME: f32 = 0.345;
+
+pub fn window_conf() -> Conf {
+    Conf {
+        window_title: String::from("lvl_0"),
+        window_width: 800,
+        window_height: 800,
+        window_resizable: false,
+        ..Default::default()
+    }
+}
