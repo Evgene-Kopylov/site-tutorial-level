@@ -12,7 +12,8 @@ pub const MAIN_UNIT_SHOOT_RANGE: f32 = 3000.;
 pub const MAIN_UNIT_SHOOT_SOUND_VOLUME: f32 = 0.16;
 pub const TARGET_UNIT_IMPACT_SOUND_VOLUME: f32 = 0.345;
 
-pub const UNIT_ROTATION_SPEED: f32 = 4.0;
+pub const ENEMY_UNIT_ROTATION_SPEED: f32 = 4.0;
+pub const ENEMY_UNIT_SPEED: f32 = 130.0;
 
 
 pub fn window_conf() -> Conf {

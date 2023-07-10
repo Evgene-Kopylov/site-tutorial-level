@@ -108,11 +108,14 @@ impl EnemyUnit {
         // сохранение направления движения
         if da.abs() > f32::to_radians(9.) {
             if da > 0. {
-                self.rotation -= dt * UNIT_ROTATION_SPEED
+                self.rotation -= dt * ENEMY_UNIT_ROTATION_SPEED
             } else {
-                self.rotation += dt * UNIT_ROTATION_SPEED
+                self.rotation += dt * ENEMY_UNIT_ROTATION_SPEED
             }
         }
+
+        self.position.x += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.cos();
+        self.position.y += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.sin();
 
     }
 
