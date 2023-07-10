@@ -1,7 +1,8 @@
 use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::color::{BLACK, GREEN, WHITE};
-use macroquad::prelude::{Color, draw_texture_ex, DrawTextureParams, Texture2D, BROWN};
+use macroquad::prelude::{Color, draw_texture_ex, DrawTextureParams, Texture2D, BROWN, RED, BLUE, YELLOW};
+use macroquad::shapes::draw_circle_lines;
 use crate::{TARGET_UNIT_IMPACT_SOUND_VOLUME, Vec2};
 use crate::settings::*; // FIXME
 
@@ -76,7 +77,19 @@ impl EnemyUnit {
         );
     }
 
-    pub fn update(&mut self, dt: f32, target: Vec2) {
+    pub fn draw_front(&self) {
+        let front_shift = 50.;
+        let dx = -1. * front_shift * self.rotation.cos();
+        let dy = -1. * front_shift * self.rotation.sin();
+        let x = self.position.x + dx;
+        let y = self.position.y + dy;
+        let r = 20.;
+        let thickness = 1.;
+        let color = YELLOW;
+        draw_circle_lines(x, y, r, thickness, color)
+    }
+
+    pub fn update(&mut self, dt: f32, target: Vec2, units: Vec<EnemyUnit>, exclude: usize) {
         self.rotation = self.rotation % f32::to_radians(360.);
         let mut dx = self.position.x - target.x;
         if dx == 0f32 {
@@ -89,12 +102,12 @@ impl EnemyUnit {
         };
 
         // угол к целиwww
-        let a;
+        let a: f32;
         if dx >= 0f32 {
             a = (dy / dx).atan();
         } else {
             a = (dy / dx).atan() - f32::to_radians(180.);
-        }
+        };
 
         // изменение угла поворота
         let mut da = self.rotation - a;
@@ -114,8 +127,23 @@ impl EnemyUnit {
             }
         }
 
+
+        let front_shift = 50.;
+        let dx = -1. * front_shift * self.rotation.cos();
+        let dy = -1. * front_shift * self.rotation.sin();
+        let x = self.position.x + dx;
+        let y = self.position.y + dy;
+
+        for i in 0..units.len() {
+            if i == exclude { continue; }
+            if (x - units[i].position.x).abs() > 30. 
+            && (y - units[i].position.y).abs() > 30. {
         self.position.x += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.cos();
         self.position.y += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.sin();
+
+            }
+        }
+
 
     }
 

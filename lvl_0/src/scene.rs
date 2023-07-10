@@ -1,5 +1,5 @@
 use macroquad::input::{is_key_down, KeyCode};
-use macroquad::prelude::{info, mouse_position, screen_height, screen_width, Vec2};
+use macroquad::prelude::{info, mouse_position, screen_height, screen_width, Vec2, RED};
 use macroquad::time::get_frame_time;
 use quad_url::set_program_parameter;
 use crate::{MainUnit, TargetUnit, EnemyUnit};
@@ -168,7 +168,13 @@ impl Scene {
 
         // update enemy units
         for i in 0..self.enemy_units.len() {
-            self.enemy_units[i].update(self.dt, self.main_unit.position);
+            let units = self.enemy_units.clone();
+            self.enemy_units[i].update(
+                self.dt, 
+                self.main_unit.position,
+                units,
+                i
+            );
         }
 
         // удаление объектов
@@ -203,6 +209,7 @@ impl Scene {
         for i in 0..self.enemy_units.len() {
             self.enemy_units[i].draw_shadow();
             self.enemy_units[i].draw();
+            // self.enemy_units[i].draw_front();
         }
         for i in 0..self.projectiles.len() {
             self.projectiles[i].draw();
