@@ -166,6 +166,11 @@ impl Scene {
             self.projectiles.push(projectile);
         }
 
+        // update enemy units
+        for i in 0..self.enemy_units.len() {
+            self.enemy_units[i].update(self.dt, self.main_unit.position);
+        }
+
         // удаление объектов
         // снаряды на отлете
         self.projectiles.retain(|p|
