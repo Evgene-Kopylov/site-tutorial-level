@@ -30,19 +30,45 @@ impl Scene {
         let dt = get_frame_time();
         let assets = Assets::new().await.unwrap();
 
-        let enemy_unit_0 = EnemyUnit::new(
+        let mut enemy_unit_0 = EnemyUnit::new(
             assets.enemy_unit_gray,
             assets.target_unit_shadow_texture,
             assets.target_impact_sound,
             target_unit_position
         );
+        enemy_unit_0.rotation += f32::to_radians(90.);
+
         let mut enemy_unit_1 = enemy_unit_0.clone();
         enemy_unit_1.position.x += 150.;
         let mut enemy_unit_2 = enemy_unit_0.clone();
         enemy_unit_2.position.x += 250.;
-        let mut enemy_unit_3 = enemy_unit_0.clone();
-        enemy_unit_3.position.x += 350.;
-        let enemy_units = vec![enemy_unit_1, enemy_unit_2, enemy_unit_3];
+        // let mut enemy_unit_3 = enemy_unit_0.clone();
+        // enemy_unit_3.position.x += 350.;
+
+        let mut enemy_unit_4 = enemy_unit_0.clone();
+        enemy_unit_4.position.x -= 150.;
+        let mut enemy_unit_5 = enemy_unit_0.clone();
+        enemy_unit_5.position.x -= 250.;
+        // let mut enemy_unit_6 = enemy_unit_0.clone();
+        // enemy_unit_6.position.x -= 350.;
+
+        let mut enemy_unit_7 = enemy_unit_0.clone();
+        enemy_unit_7.position.y += 150.;
+        enemy_unit_7.position.x -= 150.;
+        let mut enemy_unit_8 = enemy_unit_0.clone();
+        enemy_unit_8.position.y += 150.;
+        // enemy_unit_8.position.x -= 250.;
+        let mut enemy_unit_9 = enemy_unit_0.clone();
+        enemy_unit_9.position.y += 150.;
+        enemy_unit_9.position.x += 150.;
+
+        let enemy_units = vec![
+            enemy_unit_1, enemy_unit_2, 
+            // enemy_unit_3,
+            enemy_unit_4, enemy_unit_5, 
+            // enemy_unit_6,
+            enemy_unit_7, enemy_unit_8, enemy_unit_9,
+            ];
 
         Self {
             main_unit: MainUnit::new(
