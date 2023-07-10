@@ -1,9 +1,9 @@
 use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::color::{BLACK, GREEN, WHITE};
-use macroquad::prelude::{Color, draw_texture_ex, DrawTextureParams, Texture2D};
+use macroquad::prelude::{Color, draw_texture_ex, DrawTextureParams, Texture2D, BROWN};
 use crate::{TARGET_UNIT_IMPACT_SOUND_VOLUME, Vec2};
-
+use crate::settings::TRANSPARANT; // FIXME
 
 #[derive(Clone)]
 pub struct EnemyUnit {
@@ -40,7 +40,7 @@ impl EnemyUnit {
     pub fn draw(&self) {
         let color;
         if self.alive {
-            color = self.color;
+            color = BROWN;  // FIXME
         } else {
             color = GREEN;
         }
@@ -55,4 +55,21 @@ impl EnemyUnit {
             }
         );
     }
+
+    pub fn draw_shadow(&self) {
+        // тень
+        let height = 1.6;
+        let mut color = self.color;
+        color.a = 0.2;
+        draw_texture_ex(
+            self.texture,
+            self.position.x - self.texture.width() * 0.5 + 3. * height,
+            self.position.y - self.texture.height() * 0.5 + 4. * height,
+            color,
+            DrawTextureParams {
+                ..Default::default()
+            }
+        );
+    }
+
 }

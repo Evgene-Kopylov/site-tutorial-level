@@ -170,19 +170,7 @@ impl Scene {
 
         for i in 0..self.projectiles.len() {
             let p = &mut self.projectiles[i];
-            // let wall = &self.wall_block;
-            //
-            // if p.position.x > wall.position.x - 0.5 * wall.size.x
-            // && p.position.x < wall.position.x + 0.5 * wall.size.x
-            // && p.position.y > wall.position.y - 0.5 * wall.size.y
-            // && p.position.y < wall.position.y + 0.5 * wall.size.y
-            // {
-            //     p.alive = false;
-            //     self.wall_block.update(
-            //         true,
-            //     )
-            //
-            // } else
+
             if (p.position.x - self.target_unit.position.x).powf(2f32) +
                 (p.position.y - self.target_unit.position.y).powf(2f32)
                 < self.target_unit.radius.powf(2f32) {
@@ -201,16 +189,15 @@ impl Scene {
 
     pub fn draw(&self) {
         self.target_unit.draw_shadow();
-        // self.wall_block.draw_shadow();
         self.main_unit.draw();
         for i in 0..self.enemy_unit.len() {
+            self.enemy_unit[i].draw_shadow();
             self.enemy_unit[i].draw();
         }
         for i in 0..self.projectiles.len() {
             self.projectiles[i].draw();
         }
         self.target_unit.draw();
-        // self.wall_block.draw()
     }
 
 }
