@@ -11,7 +11,7 @@ use crate::utils::get_parameter_value;
 pub struct Scene {
     main_unit: MainUnit,
     target_unit: TargetUnit,
-    enemy_unit: Vec<EnemyUnit>,
+    enemy_units: Vec<EnemyUnit>,
     projectiles: Vec<Projectile>,
     mouse_position: Vec2,
     dt: f32,
@@ -38,6 +38,11 @@ impl Scene {
         );
         let mut enemy_unit_1 = enemy_unit_0.clone();
         enemy_unit_1.position.x += 150.;
+        let mut enemy_unit_2 = enemy_unit_0.clone();
+        enemy_unit_2.position.x += 250.;
+        let mut enemy_unit_3 = enemy_unit_0.clone();
+        enemy_unit_3.position.x += 350.;
+        let enemy_units = vec![enemy_unit_1, enemy_unit_2, enemy_unit_3];
 
         Self {
             main_unit: MainUnit::new(
@@ -50,7 +55,7 @@ impl Scene {
                 assets.target_impact_sound,
                 target_unit_position
             ),
-            enemy_unit: vec![enemy_unit_1],
+            enemy_units,
             projectiles: vec![],
             mouse_position,
             dt,
@@ -112,7 +117,7 @@ impl Scene {
             Ok(a) => {
                 self.order.rotation = a.to_radians();
             }
-            Err(_) => {
+            Err(_e) => {
                 // info!("{}", _e);
             }
         }
@@ -190,9 +195,9 @@ impl Scene {
     pub fn draw(&self) {
         self.target_unit.draw_shadow();
         self.main_unit.draw();
-        for i in 0..self.enemy_unit.len() {
-            self.enemy_unit[i].draw_shadow();
-            self.enemy_unit[i].draw();
+        for i in 0..self.enemy_units.len() {
+            self.enemy_units[i].draw_shadow();
+            self.enemy_units[i].draw();
         }
         for i in 0..self.projectiles.len() {
             self.projectiles[i].draw();
