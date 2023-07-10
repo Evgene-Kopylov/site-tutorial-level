@@ -21,8 +21,8 @@ pub struct EnemyUnit {
 impl EnemyUnit {
     pub fn new(texture: Texture2D, shadow_texture: Texture2D, 
         impact_sound: Sound, spawn_position: Vec2) -> Self {
-        let mut color = BLACK;
-        color.a = 0.45;
+        let color = BLACK;
+        // color.a = 0.45;
 
         Self {
             texture,
