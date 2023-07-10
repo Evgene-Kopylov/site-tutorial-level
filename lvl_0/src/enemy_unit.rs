@@ -101,16 +101,18 @@ impl EnemyUnit {
             dy += 1f32;
         };
 
-        // угол к целиwww
+        // абсолютный угол к целиwww
         let a: f32;
-        if dx >= 0f32 {
+        if dx >= 0. {
             a = (dy / dx).atan();
         } else {
             a = (dy / dx).atan() - f32::to_radians(180.);
         };
 
-        // изменение угла поворота
+        // относительный угол
         let mut da = self.rotation - a;
+        
+        // убрать намотку угла
         if da <= f32::to_radians(-180.) {
             da += f32::to_radians(360.)
         }
@@ -127,23 +129,43 @@ impl EnemyUnit {
             }
         }
 
-
-        let front_shift = 50.;
-        let dx = -1. * front_shift * self.rotation.cos();
-        let dy = -1. * front_shift * self.rotation.sin();
-        let x = self.position.x + dx;
-        let y = self.position.y + dy;
-
+        // отворот от близкого юнита
         for i in 0..units.len() {
             if i == exclude { continue; }
-            if (x - units[i].position.x).abs() > 30. 
-            && (y - units[i].position.y).abs() > 30. {
-        self.position.x += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.cos();
-        self.position.y += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.sin();
+            let x0 = self.position.x;
+            let y0 = self.position.y;
+            let x1 = units[i].position.x;
+            let y1 = units[i].position.y;
+            let dx = x0 - x1;
+            let dy = y0 - y1;
+            let distance = (dx.powf(2.) + dy.powf(2.)).sqrt();
+            if distance < 70. {  // соседний юнит близко
+
+                // абсолютный угол 
+                let a: f32;
+                if dx >= 0. {
+                    a = (dy / dx).atan();
+                } else {
+                    a = (dy / dx).atan() - f32::to_radians(180.);
+                }
+
+                // относительный угол
+                let mut da = self.rotation - a;
+
+                // отворачивать от близкого юнита
+                if da.abs() > f32::to_radians(9.) {
+                    if da < 0. {
+                        self.rotation -= 0.7 * dt * ENEMY_UNIT_ROTATION_SPEED
+                    } else {
+                        self.rotation += 0.7 * dt * ENEMY_UNIT_ROTATION_SPEED
+                    }
+                }
 
             }
         }
 
+        self.position.x += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.cos();
+        self.position.y += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.sin();
 
     }
 
