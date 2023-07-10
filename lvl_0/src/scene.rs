@@ -192,6 +192,9 @@ impl Scene {
             self.projectiles.push(projectile);
         }
 
+        // удалить дохлые юниты
+        self.enemy_units.retain(|u| u.hit_points > 0.);
+
         // update enemy units
         for i in 0..self.enemy_units.len() {
             let units = self.enemy_units.clone();
@@ -209,7 +212,8 @@ impl Scene {
                 ((p.start_position.x - p.position.x).powf(2f32)
                     + (p.start_position.y - p.position.y).powf(2f32)
                     < self.main_unit.shoot_range.powf(2f32)) && p.alive);
-
+        
+        // поражение главной мишени
         for i in 0..self.projectiles.len() {
             let p = &mut self.projectiles[i];
 
@@ -227,6 +231,25 @@ impl Scene {
 
             p.update(self.dt);
         }
+
+        // поражение enemy_units
+        for i in 0..self.projectiles.len() {
+            let p = &mut self.projectiles[i];
+            for j in 0..self.enemy_units.len() {
+                let u = &mut self.enemy_units[j];
+                let dx = p.position.x - u.position.x;
+                let dy = p.position.y - u.position.y;
+                let dist = (dx.powf(2.) + dy.powf(2.)).sqrt();
+                if dist < u.radius {
+                    u.hit_points -= 20.;
+                    let da = u.rotation - p.rotation;
+                    p.alive = false;
+                    u.rotation += (da.abs() / da) * f32::to_radians(20.);
+                }
+            }
+
+        }
+
     }
 
     pub fn draw(&self) {

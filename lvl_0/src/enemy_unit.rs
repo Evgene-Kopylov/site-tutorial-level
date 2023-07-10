@@ -17,7 +17,7 @@ pub struct EnemyUnit {
     pub shift: Vec2,
     impact_sound: Sound,
     pub(crate) hit_points: f32,
-    alive: bool,
+    pub(crate) alive: bool,
 }
 
 impl EnemyUnit {
