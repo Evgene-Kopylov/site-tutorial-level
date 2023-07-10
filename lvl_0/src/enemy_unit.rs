@@ -129,6 +129,15 @@ impl EnemyUnit {
             }
         }
 
+        self.swarm_behaviour(dt, units, exclude);
+
+        self.position.x += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.cos();
+        self.position.y += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.sin();
+
+    }
+
+    /// Роевое поведение
+    fn swarm_behaviour(&mut self, dt: f32, units: Vec<EnemyUnit>, exclude: usize) {
         // отворот от близкого юнита
         for i in 0..units.len() {
             if i == exclude { continue; }
@@ -153,20 +162,13 @@ impl EnemyUnit {
                 let mut da = self.rotation - a;
 
                 // отворачивать от близкого юнита
-                if da.abs() > f32::to_radians(9.) {
-                    if da < 0. {
-                        self.rotation -= 0.7 * dt * ENEMY_UNIT_ROTATION_SPEED
-                    } else {
-                        self.rotation += 0.7 * dt * ENEMY_UNIT_ROTATION_SPEED
-                    }
+                if da < 0. && da > -20. {
+                    self.rotation -= 0.7 * dt * ENEMY_UNIT_ROTATION_SPEED
+                } else if da > 0. && da < 20. {
+                    self.rotation += 0.7 * dt * ENEMY_UNIT_ROTATION_SPEED
                 }
 
             }
         }
-
-        self.position.x += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.cos();
-        self.position.y += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.sin();
-
     }
-
 }
