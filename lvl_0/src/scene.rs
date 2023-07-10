@@ -39,8 +39,10 @@ impl Scene {
         enemy_unit_0.rotation += f32::to_radians(90.);
 
         let mut enemy_unit_1 = enemy_unit_0.clone();
+        enemy_unit_1.position.y -= 150.;
         enemy_unit_1.position.x += 150.;
         let mut enemy_unit_2 = enemy_unit_0.clone();
+        enemy_unit_2.position.y -= 150.;
         enemy_unit_2.position.x += 250.;
         // let mut enemy_unit_3 = enemy_unit_0.clone();
         // enemy_unit_3.position.x += 350.;
