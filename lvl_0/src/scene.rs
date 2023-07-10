@@ -66,7 +66,7 @@ impl Scene {
     }
 
 
-    /// Зафиксировать активность пользователя.
+    /// Поймать активность пользователя.
     fn update_order_from_user_input(&mut self) {
         let mut x_move = 0f32;
         if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {
