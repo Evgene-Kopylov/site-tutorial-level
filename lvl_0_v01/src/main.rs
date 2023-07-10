@@ -1,10 +1,12 @@
 #![allow(unused)] // FIXME
-
-use macroquad::prelude::{clear_background, next_frame, Conf};
 mod settings;
-use settings::{window_conf, GROUND_COLOR};
 mod assets;
 mod scene;
+mod units;
+
+use macroquad::prelude::{clear_background, next_frame, Conf};
+use settings::{window_conf, GROUND_COLOR};
+
 use crate::scene::Scene;
 
 #[macroquad::main(window_conf)]
