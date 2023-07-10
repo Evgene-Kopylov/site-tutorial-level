@@ -15,7 +15,7 @@ pub struct EnemyUnit {
     pub rotation: f32,
     pub radius: f32,
     pub shift: Vec2,
-    impact_sound: Sound,
+    pub impact_sound: Sound,
     pub(crate) hit_points: f32,
     pub(crate) alive: bool,
 }

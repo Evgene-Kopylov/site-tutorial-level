@@ -1,7 +1,9 @@
+use macroquad::audio::{self, PlaySoundParams};
 use macroquad::input::{is_key_down, KeyCode};
 use macroquad::prelude::{info, mouse_position, screen_height, screen_width, Vec2, RED};
 use macroquad::time::get_frame_time;
 use quad_url::set_program_parameter;
+use crate::settings::{TARGET_UNIT_IMPACT_SOUND_VOLUME, ENEMY_UNIT_IMPACT_SOUND_VOLUME};
 use crate::{MainUnit, TargetUnit, EnemyUnit};
 use crate::projectile::Projectile;
 use crate::assets::Assets;
@@ -244,6 +246,9 @@ impl Scene {
                 let dist = (dx.powf(2.) + dy.powf(2.)).sqrt();
                 if dist < u.radius {
                     u.hit_points -= 20.;
+                    audio::play_sound(u.impact_sound, PlaySoundParams {
+                        volume: ENEMY_UNIT_IMPACT_SOUND_VOLUME, ..Default::default() });
+
                     let da = u.rotation - p.rotation;
                     p.alive = false;
                     u.rotation += (da.abs() / da) * f32::to_radians(20.);
