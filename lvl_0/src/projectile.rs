@@ -24,9 +24,12 @@ impl Projectile {
         speed: f32
     ) -> Self {
 
-        let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-        sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME;
-        audio::play_sound(shoot_sound, sound_params);
+        // let mut sound_params: PlaySoundParams = PlaySoundParams::default();
+        // sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME;
+        audio::play_sound(shoot_sound, PlaySoundParams { 
+            volume: MAIN_UNIT_SHOOT_SOUND_VOLUME,
+            ..Default::default()
+         });
 
         let size = Vec2::new(texture.width(), texture.height());
         Self {
