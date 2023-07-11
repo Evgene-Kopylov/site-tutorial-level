@@ -5,8 +5,6 @@ use macroquad::prelude::*;
 mod settings;
 use settings::*;
 
-mod projectile;
-
 mod assets;
 mod units;
 mod command;
