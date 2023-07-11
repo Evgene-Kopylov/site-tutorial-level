@@ -20,6 +20,7 @@ pub struct Scene {
     assets: Assets,
     order: Order,
     tick: f32,
+    target_point: Vec2,
 }
 
 impl Scene {
@@ -92,6 +93,7 @@ impl Scene {
             assets,
             order: Order::new(),
             tick: 1000.,  // большое число, чтобы сразу срабатывало
+            target_point: mouse_position,
         }
     }
 
@@ -134,8 +136,10 @@ impl Scene {
         match get_parameter_value("command") == String::from("Shoot") {
             true => {
                 self.order.shoot = true;
-                // self.main_unit.position.x = get_parameter_value("unit_position_x").parse().unwrap();
-                // self.main_unit.position.y = get_parameter_value("unit_position_y").parse().unwrap();
+                let x = get_parameter_value("target_point_x").parse().unwrap_or(0.);
+                let y = get_parameter_value("target_point_y").parse().unwrap_or(0.);
+                self.target_point = Vec2::new(x, y);
+                info!("{:?}", self.target_point);
                 set_program_parameter("command", "");
                 self.main_unit.shoot_timer = 1.;  // чтобы получить выстрел с минимальной задержкой
                 self.main_unit.auto_aim = true;
@@ -184,11 +188,17 @@ impl Scene {
         }
         self.dt = get_frame_time();
         self.target_unit.shift = Vec2::new(0., 0.);
-        self.mouse_position = mouse_position().into();
+
+        let target_point;
+        if self.target_point.x != 0. || self.target_point.y != 0. {
+            target_point = self.target_point;
+        } else {
+            target_point = mouse_position().into();
+        }
 
         self.main_unit.update(
             self.dt,
-            self.mouse_position,
+            target_point,
             &mut self.order,
         );
         if self.order.shoot {

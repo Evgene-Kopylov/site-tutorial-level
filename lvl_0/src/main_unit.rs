@@ -42,7 +42,7 @@ impl MainUnit {
     }
 
     // Возвращает сигнал о попадании в цель
-    pub fn update(&mut self, dt: f32, mouse_position: Vec2, order: &mut Order) {
+    pub fn update(&mut self, dt: f32, target_point: Vec2, order: &mut Order) {
         self.shoot_timer += dt;
 
         self.position.x += order.wasd.x * dt * self.speed;
@@ -53,22 +53,20 @@ impl MainUnit {
         }
 
         // поворот в сторону курсора
-        self.rotation = self.rotation % f32::to_radians(360.);
-        let mut dx = self.position.x - mouse_position.x;
+        self.rotation %= f32::to_radians(360.);
+        let mut dx = self.position.x - target_point.x;
         if dx == 0f32 { dx += 1f32; };
 
-        let mut dy = self.position.y - mouse_position.y;
+        let mut dy = self.position.y - target_point.y;
         if dy == 0f32 { dy += 1f32; };
 
         if self.auto_aim {
             self.rotation = order.rotation;
-        } else {
-            if !self.auto_aim {
-                if dx >= 0f32 {
-                    self.rotation = (dy / dx).atan() - f32::to_radians(90.);
-                } else {
-                    self.rotation = (dy / dx).atan() - f32::to_radians(270.);
-                }
+        } else if !self.auto_aim {
+            if dx >= 0f32 {
+                self.rotation = (dy / dx).atan() - f32::to_radians(90.);
+            } else {
+                self.rotation = (dy / dx).atan() - f32::to_radians(270.);
             }
         }
 

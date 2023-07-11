@@ -123,12 +123,16 @@ print(target)
             let stdout = pyodide.runPython("sys.stdout.getvalue()");
 
             let result = stdout.toString().trim().split("\n")
+            console.log(result);
             // addToOutput(`>>> ${function_name}(${target_pos}, ${unit_pos})\n` + stdout);
 
-            let rotation = result[0];
-            // setParameter("unit_position_x", unit_pos.replace('(', '').replace(')', '').split(', ')[0]);
+            let target = result[0].replace('(', '').replace(')', '').split(', ');
+            console.log(target)
+            setParameter("target_point_x", target[0]);
+            setParameter("target_point_y", target[1]);
+
             // setParameter("unit_position_y", unit_pos.replace('(', '').replace(')', '').split(', ')[1]);
-            setParameter("rotation", rotation.toString().trim());
+            // setParameter("rotation", rotation.toString().trim());
 
             setParameter("command", "Shoot");
             await sleep(1000);
