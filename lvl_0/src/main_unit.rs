@@ -78,9 +78,9 @@ impl MainUnit {
                 order.shoot = true;
                 self.bullet_load = 0;
 
-            } else if order.shoot { // команда
-                order.shoot = true;
-                self.bullet_load = 0;  // выстрелов на 1 больше
+            // } else if order.shoot { // команда
+            //     order.shoot = true;
+            //     self.bullet_load = 0;  // выстрелов на 1 больше
 
             } else if self.bullet_load > 0 { // очередь
                 order.shoot = true;

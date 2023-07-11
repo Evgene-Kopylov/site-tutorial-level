@@ -12,5 +12,5 @@ cargo watch -x run
 
 Сделать WASM
 ```console
-cargo build --target wasm32-unknown-unknown; cp target/wasm32-unknown-unknown/debug/*.wasm .wasm
+cargo build --target wasm32-unknown-unknown; cp target/wasm32-unknown-unknown/debug/*.wasm
 ```

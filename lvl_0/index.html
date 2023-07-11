@@ -1,0 +1,210 @@
+<!doctype html>
+<html class="" lang="ru">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!-- install pyodide version 0.20.0 -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js"></script>
+    <!-- import codemirror stylings -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" />
+    <!-- install codemirror.js version /5.63.3 from cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/codemirror.min.js"
+        integrity="sha512-XMlgZzPyVXf1I/wbGnofk1Hfdx+zAWyZjh6c21yGo/k1zNC4Ve6xcQnTDTCHrjFGsOrVicJsBURLYktVEu/8vQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- install codemirror python language support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/mode/python/python.min.js"
+        integrity="sha512-/mavDpedrvPG/0Grj2Ughxte/fsm42ZmZWWpHz1jCbzd5ECv8CB7PomGtw0NAnhHmE/lkDFkRMupjoohbKNA1Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--  jquery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+        integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- import codemirror dracula theme styles from cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/theme/dracula.css" />
+    <!--suppress CssUnresolvedCustomProperty -->
+    <style>
+        body {
+
+            --cell-width: calc(50vw - 10px);
+            --bot-cell-min-heigt: 200px;
+            --ide-color: #202531;
+            --ide-border-color: #262C3B;
+
+            color: rgb(173, 173, 173);
+            background: black;
+
+
+        }
+
+        .CodeMirror {
+            height: 100%;
+            width: 100%;
+
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        td>div {
+            margin-top: 4px;
+            min-width: var(--cell-width);
+            border: 2px solid var(--ide-border-color);
+        }
+
+        .CodeMirror-scroll,
+        td>div {
+            background: var(--ide-color);
+        }
+
+        .ide-code {
+            height: 100%;
+            min-height: var(--cell-width);
+        }
+
+        #code {
+            height: 100%;
+        }
+
+        .game_window {
+            width: var(--cell-width);
+            height: var(--cell-width);
+        }
+
+        #task_wnd {
+            display: none;
+            min-width: var(--cell-width);
+            min-height: var(--cell-width);
+        }
+
+        #output {
+            background: black;
+            width: 100%;
+            color: gainsboro;
+            border: none;
+        }
+
+        .tests,
+        #output {
+            min-height: var(--bot-cell-min-heigt);
+        }
+
+        .btn-ide {
+            background: #464D56;
+            color: cadetblue;
+        }
+    </style>
+    <title></title>
+</head>
+
+<body>
+
+    <table>
+
+        <tr>
+            <td>
+                <div>
+                    <button type="button" class="btn btn-dark btn-ide" onclick="showTaskDescription()">Описание</button>
+                    <button type="button" class="btn btn-dark btn-ide" onclick="showGameWindow()">Игра</button>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <!-- clean the output section -->
+                    <button type="button" class="btn btn-dark btn-ide" onclick="clearHistory()">Python <span
+                            id="python_version">3</span></button>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+
+            <td>
+                <div id="game_wnd">
+                    <canvas class="game_window" id="glcanvas" tabindex='1' oncontextmenu="return false;"></canvas>
+                </div>
+                <div id="task_wnd">
+                    <h4>Описание задачи</h4>
+                    <p>Попади в мишень.</p>
+                    <p>Известны положения юникта и мишени в системе координат.</p>
+                    <p>Можно использовать страндартные библиотеки Python и библиотеку numpy.</p>
+                    <p>Можно управлять вручную. WASD, ← → ↑ ↓, мышка.</p>
+                    <p></p>
+                    <p></p>
+
+                    <details>
+                        <summary>Подсказка 1</summary>
+                        <p>Арктангенс.</p>
+                    </details>
+
+                    <details>
+                        <summary>Подсказка 2</summary>
+                        <div style="background: #242424">
+                            <pre>
+                        <code>
+    import numpy as np
+    ...
+    ...
+
+    dx = target_pos[0] - unit_pos[0]
+    dy = target_pos[1] - unit_pos[1]
+
+    return 180 - np.rad2deg(np.arctan2(dx, dy))
+                        </code>
+                    </pre>
+                        </div>
+                    </details>
+
+                </div>
+                <div>
+                    <textarea readonly class="" id="output" name="output"></textarea>
+                </div>
+            </td>
+
+            <td>
+
+                <div class="ide-code">
+                    <textarea id="code" name="code" class="h-full"></textarea>
+                </div>
+                <div class="tests">
+                    <!-- run button to pass the code to pyodide.runPython() -->
+                    <button type="button" class="btn btn-dark btn-ide" onclick="showGameWindow(); evaluatePython();">
+                        ▶︎ Тест
+                    </button>
+                    <!-- clean the output section -->
+                    <!--            <button class="btn btn-dark btn-ide" onclick="clearHistory()" type="button">CLS</button>-->
+                </div>
+
+            </td>
+
+        </tr>
+    </table>
+
+    <script>
+        // показать task_wnd
+        function showGameWindow() {
+            document.getElementById("game_wnd").style.display = "block";
+            document.getElementById("task_wnd").style.display = "none";
+        }
+
+        // показать game_wnd
+        function showTaskDescription() {
+            document.getElementById("game_wnd").style.display = "none";
+            document.getElementById("task_wnd").style.display = "block";
+        }
+    </script>
+
+    <script src="https://not-fl3.github.io/miniquad-samples/mq_js_bundle.js"></script>
+    <script src="https://evgene-kopylov.github.io/js-imports.github.io/sapp_jsutils.js"></script>
+    <script src="https://evgene-kopylov.github.io/js-imports.github.io/quad-url.js"></script>
+    <script>load("lvl_0.wasm");</script>
+    <script src="python_in_browser/static/js/main.js"></script>
+</body>
+
+</html>

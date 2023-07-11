@@ -134,8 +134,8 @@ impl Scene {
         match get_parameter_value("command") == String::from("Shoot") {
             true => {
                 self.order.shoot = true;
-                self.main_unit.position.x = get_parameter_value("unit_position_x").parse().unwrap();
-                self.main_unit.position.y = get_parameter_value("unit_position_y").parse().unwrap();
+                // self.main_unit.position.x = get_parameter_value("unit_position_x").parse().unwrap();
+                // self.main_unit.position.y = get_parameter_value("unit_position_y").parse().unwrap();
                 set_program_parameter("command", "");
                 self.main_unit.shoot_timer = 1.;  // чтобы получить выстрел с минимальной задержкой
                 self.main_unit.auto_aim = true;
@@ -159,6 +159,17 @@ impl Scene {
         set_program_parameter("target_pos", line.as_str());
         let line = format!("({}, {})", self.main_unit.position.x as i32, self.main_unit.position.y as i32);
         set_program_parameter("unit_pos", line.as_str());
+        
+        let mut line = "[".to_string();
+        for i in 0..self.enemy_units.len() {
+            let value = format!("({}, {}), ",
+                self.enemy_units[i].position.x as i32,
+                self.enemy_units[i].position.y as i32
+            );
+            line += &value;
+        }
+        line += "]";
+        set_program_parameter("enemy_units", &line);
     }
 
 
