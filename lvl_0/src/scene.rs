@@ -1,11 +1,11 @@
 use crate::assets::Assets;
-use crate::enemy_unit::EnemyUnit;
 use crate::command::Command;
 use crate::projectile::Projectile;
 use crate::settings::ENEMY_UNIT_IMPACT_SOUND_VOLUME;
-use crate::target_unit::TargetUnit;
+use crate::units::enemy_unit::EnemyUnit;
+use crate::units::main_unit::MainUnit;
+use crate::units::target_unit::TargetUnit;
 use crate::utils::get_parameter_value;
-use crate::MainUnit;
 use macroquad::audio::{self, PlaySoundParams};
 use macroquad::input::{is_key_down, KeyCode};
 use macroquad::prelude::{info, mouse_position, screen_height, screen_width, Vec2};
