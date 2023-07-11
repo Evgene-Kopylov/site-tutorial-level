@@ -7,17 +7,16 @@ use settings::*;
 
 mod projectile;
 
-mod main_unit;
-mod target_unit;
-mod enemy_unit;
-mod scene;
-mod utils;
 mod assets;
+mod enemy_unit;
+mod main_unit;
 mod order;
+mod scene;
+mod target_unit;
+mod utils;
 
-use main_unit::*;
 use crate::scene::Scene;
-
+use main_unit::*;
 
 #[macroquad::main(window_conf)]
 async fn main() {

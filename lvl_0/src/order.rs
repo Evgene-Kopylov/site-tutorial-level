@@ -1,10 +1,8 @@
 use macroquad::math::Vec2;
 
-
-
 pub struct Order {
     pub shoot: bool,
-    pub wasd: Vec2,  // смещение
+    pub wasd: Vec2, // смещение
     pub rotation: f32,
 }
 

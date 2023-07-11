@@ -1,11 +1,8 @@
+use crate::settings::*;
+use crate::Vec2;
 use macroquad::audio::Sound;
 use macroquad::color::{BLACK, GREEN};
-use macroquad::prelude::{
-    Color, draw_texture_ex, 
-    DrawTextureParams, Texture2D, 
-    BROWN};
-use crate::Vec2;
-use crate::settings::*; // FIXME
+use macroquad::prelude::{draw_texture_ex, Color, DrawTextureParams, Texture2D, BROWN}; // FIXME
 
 #[derive(Clone)]
 pub struct EnemyUnit {
@@ -22,8 +19,12 @@ pub struct EnemyUnit {
 }
 
 impl EnemyUnit {
-    pub fn new(texture: Texture2D, shadow_texture: Texture2D, 
-        impact_sound: Sound, spawn_position: Vec2) -> Self {
+    pub fn new(
+        texture: Texture2D,
+        shadow_texture: Texture2D,
+        impact_sound: Sound,
+        spawn_position: Vec2,
+    ) -> Self {
         let color = BLACK;
         // color.a = 0.45;
 
@@ -42,12 +43,7 @@ impl EnemyUnit {
     }
 
     pub fn draw(&self) {
-
-        let color = if self.alive {
-            BROWN
-        } else {
-            GREEN
-        };
+        let color = if self.alive { BROWN } else { GREEN };
 
         draw_texture_ex(
             self.texture,
@@ -57,7 +53,7 @@ impl EnemyUnit {
             DrawTextureParams {
                 rotation: self.rotation - f32::to_radians(90.),
                 ..Default::default()
-            }
+            },
         );
     }
 
@@ -74,7 +70,7 @@ impl EnemyUnit {
             DrawTextureParams {
                 rotation: self.rotation - f32::to_radians(90.),
                 ..Default::default()
-            }
+            },
         );
     }
 
@@ -99,7 +95,7 @@ impl EnemyUnit {
 
         // относительный угол
         let mut da = self.rotation - a;
-        
+
         // убрать намотку угла
         if da <= f32::to_radians(-180.) {
             da += f32::to_radians(360.)
@@ -121,14 +117,15 @@ impl EnemyUnit {
 
         self.position.x += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.cos();
         self.position.y += -1. * dt * ENEMY_UNIT_SPEED * self.rotation.sin();
-
     }
 
     /// Роевое поведение
     fn swarm_behaviour(&mut self, dt: f32, units: Vec<EnemyUnit>, exclude: usize) {
         // отворот от близкого юнита
         for (i, unit) in units.iter().enumerate() {
-            if i == exclude { continue; }
+            if i == exclude {
+                continue;
+            }
             let x0 = self.position.x;
             let y0 = self.position.y;
             let x1 = unit.position.x;
@@ -136,9 +133,10 @@ impl EnemyUnit {
             let dx = x0 - x1;
             let dy = y0 - y1;
             let distance = (dx.powf(2.) + dy.powf(2.)).sqrt();
-            if distance < 70. {  // соседний юнит близко
+            if distance < 70. {
+                // соседний юнит близко
 
-                // абсолютный угол 
+                // абсолютный угол
                 let a: f32 = if dx >= 0. {
                     (dy / dx).atan()
                 } else {
@@ -154,7 +152,6 @@ impl EnemyUnit {
                 } else if da > 0. && da < 20. {
                     self.rotation += 0.7 * dt * ENEMY_UNIT_ROTATION_SPEED
                 }
-
             }
         }
     }

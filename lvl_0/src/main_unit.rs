@@ -1,8 +1,6 @@
-use macroquad::prelude::*;
 use crate::order::Order;
 use crate::settings::*;
-
-
+use macroquad::prelude::*;
 
 pub struct MainUnit {
     pub texture: Texture2D,
@@ -19,12 +17,8 @@ pub struct MainUnit {
     bullet_load: u8,
 }
 
-
 impl MainUnit {
-    pub fn new(
-        texture: Texture2D,
-        position: Vec2,
-    ) -> Self {
+    pub fn new(texture: Texture2D, position: Vec2) -> Self {
         Self {
             texture,
             position,
@@ -55,10 +49,14 @@ impl MainUnit {
         // поворот в сторону курсора
         self.rotation %= f32::to_radians(360.);
         let mut dx = self.position.x - target_point.x;
-        if dx == 0f32 { dx += 1f32; };
+        if dx == 0f32 {
+            dx += 1f32;
+        };
 
         let mut dy = self.position.y - target_point.y;
-        if dy == 0f32 { dy += 1f32; };
+        if dy == 0f32 {
+            dy += 1f32;
+        };
 
         if self.auto_aim {
             self.rotation = order.rotation;
@@ -72,19 +70,19 @@ impl MainUnit {
 
         // Управление огнем
         if self.shoot_timer >= self.shoot_delay {
-            if is_mouse_button_down(MouseButton::Left) {  // ЛКМ
+            if is_mouse_button_down(MouseButton::Left) {
+                // ЛКМ
                 order.shoot = true;
                 self.bullet_load = 0;
 
             // } else if order.shoot { // команда
             //     order.shoot = true;
             //     self.bullet_load = 0;  // выстрелов на 1 больше
-
-            } else if self.bullet_load > 0 { // очередь
+            } else if self.bullet_load > 0 {
+                // очередь
                 order.shoot = true;
                 self.bullet_load -= 1;
             }
-
         } else {
             order.shoot = false;
         }
@@ -105,7 +103,7 @@ impl MainUnit {
                 dest_size: Some(Vec2::new(self.size.x, self.size.y)),
                 rotation: self.rotation,
                 ..Default::default()
-            }
+            },
         );
         // сам юнит
         draw_texture_ex(
@@ -117,8 +115,7 @@ impl MainUnit {
                 dest_size: Some(Vec2::new(self.size.x, self.size.y)),
                 rotation: self.rotation,
                 ..Default::default()
-            }
+            },
         );
-
     }
 }

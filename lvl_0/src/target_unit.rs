@@ -1,9 +1,8 @@
+use crate::{Vec2, TARGET_UNIT_IMPACT_SOUND_VOLUME};
 use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::color::{BLACK, GREEN, WHITE};
-use macroquad::prelude::{Color, draw_texture_ex, DrawTextureParams, Texture2D};
-use crate::{TARGET_UNIT_IMPACT_SOUND_VOLUME, Vec2};
-
+use macroquad::prelude::{draw_texture_ex, Color, DrawTextureParams, Texture2D};
 
 pub struct TargetUnit {
     pub texture: Texture2D,
@@ -18,7 +17,12 @@ pub struct TargetUnit {
 }
 
 impl TargetUnit {
-    pub fn new(texture: Texture2D, shadow_texture: Texture2D, impact_sound: Sound, spawn_position: Vec2) -> Self {
+    pub fn new(
+        texture: Texture2D,
+        shadow_texture: Texture2D,
+        impact_sound: Sound,
+        spawn_position: Vec2,
+    ) -> Self {
         let mut color = BLACK;
         color.a = 0.45;
 
@@ -49,29 +53,30 @@ impl TargetUnit {
             // sound_params.volume = TARGET_UNIT_IMPACT_SOUND_VOLUME;
 
             if self.alive {
-                audio::play_sound(self.impact_sound, PlaySoundParams {
-                    volume: TARGET_UNIT_IMPACT_SOUND_VOLUME,
-                    ..Default::default()
-                });
-                    // self.impact_sound, sound_params);
+                audio::play_sound(
+                    self.impact_sound,
+                    PlaySoundParams {
+                        volume: TARGET_UNIT_IMPACT_SOUND_VOLUME,
+                        ..Default::default()
+                    },
+                );
+                // self.impact_sound, sound_params);
             } else {
                 self.shift *= 0.4;
                 // sound_params.volume *= 0.25;
-                audio::play_sound(self.impact_sound, PlaySoundParams {
-                    volume: TARGET_UNIT_IMPACT_SOUND_VOLUME * 0.25,
-                    ..Default::default()
-                });
+                audio::play_sound(
+                    self.impact_sound,
+                    PlaySoundParams {
+                        volume: TARGET_UNIT_IMPACT_SOUND_VOLUME * 0.25,
+                        ..Default::default()
+                    },
+                );
             }
-
         }
     }
 
     pub fn draw(&self) {
-        let color = if self.alive {
-            WHITE
-        } else {
-            GREEN
-        };
+        let color = if self.alive { WHITE } else { GREEN };
 
         draw_texture_ex(
             self.texture,
@@ -80,7 +85,7 @@ impl TargetUnit {
             color,
             DrawTextureParams {
                 ..Default::default()
-            }
+            },
         );
     }
 
@@ -94,8 +99,7 @@ impl TargetUnit {
             self.color,
             DrawTextureParams {
                 ..Default::default()
-            }
+            },
         );
     }
-
 }
