@@ -1,6 +1,6 @@
 use crate::assets::Assets;
 use crate::enemy_unit::EnemyUnit;
-use crate::order::Order;
+use crate::command::Command;
 use crate::projectile::Projectile;
 use crate::settings::ENEMY_UNIT_IMPACT_SOUND_VOLUME;
 use crate::target_unit::TargetUnit;
@@ -19,7 +19,7 @@ pub struct Scene {
     projectiles: Vec<Projectile>,
     dt: f32,
     assets: Assets,
-    order: Order,
+    command: Command,
     tick: f32,
     target_point: Vec2,
 }
@@ -84,14 +84,14 @@ impl Scene {
             projectiles: vec![],
             dt,
             assets,
-            order: Order::new(),
+            command: Command::new(),
             tick: 1000., // большое число, чтобы сразу срабатывало
             target_point: mouse_position,
         }
     }
 
     /// Поймать активность пользователя.
-    fn update_order_from_user_input(&mut self) {
+    fn update_command_from_user_input(&mut self) {
         let mut x_move = 0f32;
         if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {
             x_move -= 1f32;
@@ -121,13 +121,13 @@ impl Scene {
         if self.main_unit.position.y > screen_height() {
             y_move = -1f32;
         }
-        self.order.wasd = Vec2::new(x_move, y_move);
+        self.command.wasd = Vec2::new(x_move, y_move);
     }
 
-    fn update_order_from_url_query(&mut self) {
+    fn update_command_from_url_query(&mut self) {
         match get_parameter_value("command") == *"Shoot" {
             true => {
-                self.order.shoot = true;
+                self.command.shoot = true;
                 let x = get_parameter_value("target_point_x").parse().unwrap_or(0.);
                 let y = get_parameter_value("target_point_y").parse().unwrap_or(0.);
                 self.target_point = Vec2::new(x, y);
@@ -141,7 +141,7 @@ impl Scene {
 
         match get_parameter_value("rotation").parse::<f32>() {
             Ok(a) => {
-                self.order.rotation = a.to_radians();
+                self.command.rotation = a.to_radians();
             }
             Err(_e) => {
                 // info!("{}", _e);
@@ -175,12 +175,12 @@ impl Scene {
 
     pub fn update(&mut self) {
         self.tick += self.dt;
-        self.update_order_from_user_input();
+        self.update_command_from_user_input();
 
         if self.tick >= 1. {
             self.tick = 0.0;
             self.set_parameters_to_url_query();
-            self.update_order_from_url_query();
+            self.update_command_from_url_query();
         }
         self.dt = get_frame_time();
         self.target_unit.shift = Vec2::new(0., 0.);
@@ -192,8 +192,8 @@ impl Scene {
         };
 
         self.main_unit
-            .update(self.dt, target_point, &mut self.order);
-        if self.order.shoot {
+            .update(self.dt, target_point, &mut self.command);
+        if self.command.shoot {
             let position = Vec2::new(
                 // точка появления выстрела
                 self.main_unit.position.x

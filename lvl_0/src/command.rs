@@ -1,12 +1,12 @@
 use macroquad::math::Vec2;
 
-pub struct Order {
+pub struct Command {
     pub shoot: bool,
     pub wasd: Vec2, // смещение
     pub rotation: f32,
 }
 
-impl Order {
+impl Command {
     pub fn new() -> Self {
         Self {
             shoot: false,

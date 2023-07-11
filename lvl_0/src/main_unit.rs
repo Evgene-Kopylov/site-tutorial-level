@@ -1,4 +1,4 @@
-use crate::order::Order;
+use crate::command::Command;
 use crate::settings::*;
 use macroquad::prelude::*;
 
@@ -36,13 +36,13 @@ impl MainUnit {
     }
 
     // Возвращает сигнал о попадании в цель
-    pub fn update(&mut self, dt: f32, target_point: Vec2, order: &mut Order) {
+    pub fn update(&mut self, dt: f32, target_point: Vec2, command: &mut Command) {
         self.shoot_timer += dt;
 
-        self.position.x += order.wasd.x * dt * self.speed;
-        self.position.y += order.wasd.y * dt * self.speed;
+        self.position.x += command.wasd.x * dt * self.speed;
+        self.position.y += command.wasd.y * dt * self.speed;
 
-        if order.wasd.x != 0. || order.wasd.y != 0. || is_mouse_button_down(MouseButton::Left) {
+        if command.wasd.x != 0. || command.wasd.y != 0. || is_mouse_button_down(MouseButton::Left) {
             self.auto_aim = false;
         }
 
@@ -59,7 +59,7 @@ impl MainUnit {
         };
 
         if self.auto_aim {
-            self.rotation = order.rotation;
+            self.rotation = command.rotation;
         } else if !self.auto_aim {
             if dx >= 0f32 {
                 self.rotation = (dy / dx).atan() - f32::to_radians(90.);
@@ -72,18 +72,18 @@ impl MainUnit {
         if self.shoot_timer >= self.shoot_delay {
             if is_mouse_button_down(MouseButton::Left) {
                 // ЛКМ
-                order.shoot = true;
+                command.shoot = true;
                 self.bullet_load = 0;
             } else if self.bullet_load > 0 {
                 // очередь
-                order.shoot = true;
+                command.shoot = true;
                 self.bullet_load -= 1;
             }
         } else {
-            order.shoot = false;
+            command.shoot = false;
         }
 
-        if order.shoot {
+        if command.shoot {
             self.shoot_timer = 0.;
         }
     }

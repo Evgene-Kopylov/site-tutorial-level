@@ -10,7 +10,7 @@ mod projectile;
 mod assets;
 mod enemy_unit;
 mod main_unit;
-mod order;
+mod command;
 mod scene;
 mod target_unit;
 mod utils;
