@@ -26,7 +26,6 @@ impl EnemyUnit {
         spawn_position: Vec2,
     ) -> Self {
         let color = BLACK;
-        // color.a = 0.45;
 
         Self {
             texture,

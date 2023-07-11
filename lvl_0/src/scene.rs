@@ -47,22 +47,17 @@ impl Scene {
         let mut enemy_unit_2 = enemy_unit_0.clone();
         enemy_unit_2.position.y -= 150.;
         enemy_unit_2.position.x += 250.;
-        // let mut enemy_unit_3 = enemy_unit_0.clone();
-        // enemy_unit_3.position.x += 350.;
 
         let mut enemy_unit_4 = enemy_unit_0.clone();
         enemy_unit_4.position.x -= 150.;
         let mut enemy_unit_5 = enemy_unit_0.clone();
         enemy_unit_5.position.x -= 250.;
-        // let mut enemy_unit_6 = enemy_unit_0.clone();
-        // enemy_unit_6.position.x -= 350.;
 
         let mut enemy_unit_7 = enemy_unit_0.clone();
         enemy_unit_7.position.y += 150.;
         enemy_unit_7.position.x -= 150.;
         let mut enemy_unit_8 = enemy_unit_0.clone();
         enemy_unit_8.position.y += 150.;
-        // enemy_unit_8.position.x -= 250.;
         let mut enemy_unit_9 = enemy_unit_0;
         enemy_unit_9.position.y += 150.;
         enemy_unit_9.position.x += 150.;
@@ -70,10 +65,8 @@ impl Scene {
         let enemy_units = vec![
             enemy_unit_1,
             enemy_unit_2,
-            // enemy_unit_3,
             enemy_unit_4,
             enemy_unit_5,
-            // enemy_unit_6,
             enemy_unit_7,
             enemy_unit_8,
             enemy_unit_9,
@@ -285,7 +278,6 @@ impl Scene {
         for i in 0..self.enemy_units.len() {
             self.enemy_units[i].draw_shadow();
             self.enemy_units[i].draw();
-            // self.enemy_units[i].draw_front();
         }
         for i in 0..self.projectiles.len() {
             self.projectiles[i].draw();

@@ -21,8 +21,6 @@ impl Projectile {
         position: Vec2,
         speed: f32,
     ) -> Self {
-        // let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-        // sound_params.volume = MAIN_UNIT_SHOOT_SOUND_VOLUME;
         audio::play_sound(
             shoot_sound,
             PlaySoundParams {

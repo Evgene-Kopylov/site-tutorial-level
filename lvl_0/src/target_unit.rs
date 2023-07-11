@@ -49,8 +49,6 @@ impl TargetUnit {
 
             let shift = 5.;
             self.shift = Vec2::new(shift * impact_angle.sin(), shift * impact_angle.cos());
-            // let mut sound_params: PlaySoundParams = PlaySoundParams::default();
-            // sound_params.volume = TARGET_UNIT_IMPACT_SOUND_VOLUME;
 
             if self.alive {
                 audio::play_sound(
@@ -60,10 +58,8 @@ impl TargetUnit {
                         ..Default::default()
                     },
                 );
-                // self.impact_sound, sound_params);
             } else {
                 self.shift *= 0.4;
-                // sound_params.volume *= 0.25;
                 audio::play_sound(
                     self.impact_sound,
                     PlaySoundParams {
