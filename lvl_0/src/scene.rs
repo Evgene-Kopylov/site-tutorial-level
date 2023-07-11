@@ -1,13 +1,17 @@
 use macroquad::audio::{self, PlaySoundParams};
 use macroquad::input::{is_key_down, KeyCode};
-use macroquad::prelude::{info, mouse_position, screen_height, screen_width, Vec2, RED};
+use macroquad::prelude::{
+    info, mouse_position, screen_height, 
+    screen_width, Vec2};
 use macroquad::time::get_frame_time;
 use quad_url::set_program_parameter;
-use crate::settings::{TARGET_UNIT_IMPACT_SOUND_VOLUME, ENEMY_UNIT_IMPACT_SOUND_VOLUME};
-use crate::{MainUnit, TargetUnit, EnemyUnit};
+use crate::MainUnit;
+use crate::enemy_unit::EnemyUnit;
 use crate::projectile::Projectile;
 use crate::assets::Assets;
 use crate::order::Order;
+use crate::settings::ENEMY_UNIT_IMPACT_SOUND_VOLUME;
+use crate::target_unit::TargetUnit;
 use crate::utils::get_parameter_value;
 
 pub struct Scene {
@@ -15,7 +19,6 @@ pub struct Scene {
     target_unit: TargetUnit,
     enemy_units: Vec<EnemyUnit>,
     projectiles: Vec<Projectile>,
-    mouse_position: Vec2,
     dt: f32,
     assets: Assets,
     order: Order,
@@ -88,7 +91,6 @@ impl Scene {
             ),
             enemy_units,
             projectiles: vec![],
-            mouse_position,
             dt,
             assets,
             order: Order::new(),
