@@ -1,4 +1,4 @@
-#![allow(unused)] // FIXME
+// #![allow(unused)] // FIXME
 
 use macroquad::prelude::*;
 

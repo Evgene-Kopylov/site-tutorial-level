@@ -1,9 +1,10 @@
-use macroquad::audio;
-use macroquad::audio::{PlaySoundParams, Sound};
-use macroquad::color::{BLACK, GREEN, WHITE};
-use macroquad::prelude::{Color, draw_texture_ex, DrawTextureParams, Texture2D, BROWN, RED, BLUE, YELLOW};
-use macroquad::shapes::draw_circle_lines;
-use crate::{TARGET_UNIT_IMPACT_SOUND_VOLUME, Vec2};
+use macroquad::audio::Sound;
+use macroquad::color::{BLACK, GREEN};
+use macroquad::prelude::{
+    Color, draw_texture_ex, 
+    DrawTextureParams, Texture2D, 
+    BROWN};
+use crate::Vec2;
 use crate::settings::*; // FIXME
 
 #[derive(Clone)]
@@ -77,18 +78,6 @@ impl EnemyUnit {
         );
     }
 
-    pub fn draw_front(&self) {
-        let front_shift = 50.;
-        let dx = -1. * front_shift * self.rotation.cos();
-        let dy = -1. * front_shift * self.rotation.sin();
-        let x = self.position.x + dx;
-        let y = self.position.y + dy;
-        let r = 20.;
-        let thickness = 1.;
-        let color = YELLOW;
-        draw_circle_lines(x, y, r, thickness, color)
-    }
-
     pub fn update(&mut self, dt: f32, target: Vec2, units: Vec<EnemyUnit>, exclude: usize) {
         self.rotation %= f32::to_radians(360.);
         let mut dx = self.position.x - target.x;
@@ -157,7 +146,7 @@ impl EnemyUnit {
                 };
 
                 // относительный угол
-                let mut da = self.rotation - a;
+                let da = self.rotation - a;
 
                 // отворачивать от близкого юнита
                 if da < 0. && da > -20. {
