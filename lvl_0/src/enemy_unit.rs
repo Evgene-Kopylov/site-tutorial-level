@@ -138,24 +138,23 @@ impl EnemyUnit {
     /// Роевое поведение
     fn swarm_behaviour(&mut self, dt: f32, units: Vec<EnemyUnit>, exclude: usize) {
         // отворот от близкого юнита
-        for i in 0..units.len() {
+        for (i, unit) in units.iter().enumerate() {
             if i == exclude { continue; }
             let x0 = self.position.x;
             let y0 = self.position.y;
-            let x1 = units[i].position.x;
-            let y1 = units[i].position.y;
+            let x1 = unit.position.x;
+            let y1 = unit.position.y;
             let dx = x0 - x1;
             let dy = y0 - y1;
             let distance = (dx.powf(2.) + dy.powf(2.)).sqrt();
             if distance < 70. {  // соседний юнит близко
 
                 // абсолютный угол 
-                let a: f32;
-                if dx >= 0. {
-                    a = (dy / dx).atan();
+                let a: f32 = if dx >= 0. {
+                    (dy / dx).atan()
                 } else {
-                    a = (dy / dx).atan() - f32::to_radians(180.);
-                }
+                    (dy / dx).atan() - f32::to_radians(180.)
+                };
 
                 // относительный угол
                 let mut da = self.rotation - a;
