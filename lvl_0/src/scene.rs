@@ -63,7 +63,7 @@ impl Scene {
         let mut enemy_unit_8 = enemy_unit_0.clone();
         enemy_unit_8.position.y += 150.;
         // enemy_unit_8.position.x -= 250.;
-        let mut enemy_unit_9 = enemy_unit_0.clone();
+        let mut enemy_unit_9 = enemy_unit_0;
         enemy_unit_9.position.y += 150.;
         enemy_unit_9.position.x += 150.;
 
@@ -133,7 +133,7 @@ impl Scene {
     }
 
     fn update_order_from_url_query(&mut self) {
-        match get_parameter_value("command") == String::from("Shoot") {
+        match get_parameter_value("command") == *"Shoot" {
             true => {
                 self.order.shoot = true;
                 let x = get_parameter_value("target_point_x").parse().unwrap_or(0.);
@@ -189,12 +189,12 @@ impl Scene {
         self.dt = get_frame_time();
         self.target_unit.shift = Vec2::new(0., 0.);
 
-        let target_point;
-        if self.target_point.x != 0. || self.target_point.y != 0. {
-            target_point = self.target_point;
+        let target_point = if self.target_point.x != 0. 
+        || self.target_point.y != 0. {
+            self.target_point
         } else {
-            target_point = mouse_position().into();
-        }
+            mouse_position().into()
+        };
 
         self.main_unit.update(
             self.dt,
