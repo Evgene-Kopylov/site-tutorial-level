@@ -17,8 +17,6 @@ mod order;
 
 use main_unit::*;
 use crate::scene::Scene;
-use crate::target_unit::TargetUnit;
-use crate::enemy_unit::EnemyUnit;
 
 
 #[macroquad::main(window_conf)]
