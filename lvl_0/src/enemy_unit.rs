@@ -41,12 +41,12 @@ impl EnemyUnit {
     }
 
     pub fn draw(&self) {
-        let color;
-        if self.alive {
-            color = BROWN;  // FIXME
+
+        let color = if self.alive {
+            BROWN
         } else {
-            color = GREEN;
-        }
+            GREEN
+        };
 
         draw_texture_ex(
             self.texture,
@@ -90,7 +90,7 @@ impl EnemyUnit {
     }
 
     pub fn update(&mut self, dt: f32, target: Vec2, units: Vec<EnemyUnit>, exclude: usize) {
-        self.rotation = self.rotation % f32::to_radians(360.);
+        self.rotation %= f32::to_radians(360.);
         let mut dx = self.position.x - target.x;
         if dx == 0f32 {
             dx += 1f32;
@@ -102,11 +102,10 @@ impl EnemyUnit {
         };
 
         // абсолютный угол к целиwww
-        let a: f32;
-        if dx >= 0. {
-            a = (dy / dx).atan();
+        let a: f32 = if dx >= 0. {
+            (dy / dx).atan()
         } else {
-            a = (dy / dx).atan() - f32::to_radians(180.);
+            (dy / dx).atan() - f32::to_radians(180.)
         };
 
         // относительный угол
