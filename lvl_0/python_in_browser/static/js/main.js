@@ -18,7 +18,8 @@ const function_name = "function";
 // set the initial value of the editor
 editor.setValue(`
 def ${function_name}(
-    enemy_units: [(int, int)]
+    enemy_units: [(int, int)],
+    self_pos: (int, int)
 ) -> (int, int):
     """
     Выбери цель для стрельбы
@@ -29,7 +30,17 @@ def ${function_name}(
     
     ### Вставьте вашь код сюда
     
-    return (100, 100)
+    distance = 10000
+    target = (0, 0)
+    for unit in enemy_units:
+        dx = self_pos[0] - unit[0]
+        dy = self_pos[1] - unit[1]
+        dis = (dx * dx + dy * dy) ** 0.5
+        if dis < distance:
+            distance = dis
+            target = (unit[0], unit[1])
+
+    return target
 `);
 output.value = "Initializing...\n";
 
@@ -93,7 +104,7 @@ function sleep(ms) {
 async function evaluatePython(test = 'all') {
     let target_pos = getParameterValue('target_pos');
     let enemy_units = getParameterValue('enemy_units');
-    // let unit_pos = getParameterValue('unit_pos');
+    let unit_pos = getParameterValue('unit_pos');
 
     let pyodide = await pyodideReadyPromise;
     try {
@@ -112,10 +123,11 @@ import io
 sys.stdout = io.StringIO()
 
 enemy_units = ${enemy_units}
+self_pos = ${unit_pos}
         `);
         pyodide.runPython(`
 ${editor.getValue()}    
-target = ${function_name}(enemy_units)
+target = ${function_name}(enemy_units, self_pos)
 print(target)
         `);
 
