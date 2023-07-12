@@ -54,15 +54,9 @@ impl Scene {
         scene
     }
 
-    /// запустить / перезапустить игру. 
-    /// здоровье юнитов и позиции будут восстановленны
+    /// запустить игру. 
     fn start(&mut self) {
-        // очистить поле
-        self.enemy_units = vec![];
-
-        // восстановить `target_unit`
-        self.target_unit.hit_points = 100.;
-
+        // спавн `enemy_units`
         // слево
         self.spawn_single_enemy_unit(-100., 0.);
         self.spawn_single_enemy_unit(-200., 0.);
@@ -71,6 +65,18 @@ impl Scene {
         self.spawn_single_enemy_unit(200., 0.);
         // впереди
         // self.spawn_single_enemy_unit(0., 100.);
+    }
+
+    /// перезапустить игру
+    /// здоровье юнитов и позиции будут восстановленны
+    fn restart(&mut self) {
+        // очистить поле
+        self.enemy_units = vec![];
+
+        // восстановить `target_unit`
+        self.target_unit.hit_points = 100.;
+
+        self.start();
     }
 
     /// создать enemy_unit по координатам относительно `target_unit`
@@ -124,6 +130,7 @@ impl Scene {
     fn update_command_from_url_query(&mut self) {
         match get_parameter_value("command") == *"Shoot" {
             true => {
+                self.restart();
                 self.command.shoot = true;
                 let x = get_parameter_value("target_point_x").parse().unwrap_or(0.);
                 let y = get_parameter_value("target_point_y").parse().unwrap_or(0.);
