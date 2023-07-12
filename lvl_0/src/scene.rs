@@ -68,7 +68,7 @@ impl Scene {
         self.spawn_single_enemy_unit(100., 0.);
         self.spawn_single_enemy_unit(200., 0.);
         // впереди
-        self.spawn_single_enemy_unit(0., 100.);
+        // self.spawn_single_enemy_unit(0., 100.);
     }
 
     /// создать enemy_unit по координатам относительно `target_unit`
