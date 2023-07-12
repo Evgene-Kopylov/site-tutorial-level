@@ -25,6 +25,7 @@ pub struct Scene {
 }
 
 impl Scene {
+    /// создание экземпляра Сцены
     pub async fn new() -> Self {
         let spawn_position = Vec2::new(screen_width() * 0.5, screen_height() * 0.8);
         let target_unit_position = Vec2::new(screen_width() * 0.5, 160.);
@@ -124,6 +125,7 @@ impl Scene {
         self.command.wasd = Vec2::new(x_move, y_move);
     }
 
+    /// Обновить `Command` из URL аргументов
     fn update_command_from_url_query(&mut self) {
         match get_parameter_value("command") == *"Shoot" {
             true => {
@@ -149,6 +151,7 @@ impl Scene {
         }
     }
 
+    /// передать параметры в URL аргементы
     fn set_parameters_to_url_query(&mut self) {
         let line = format!(
             "({}, {})",
@@ -173,6 +176,7 @@ impl Scene {
         set_program_parameter("enemy_units", &line);
     }
 
+    /// Обновить сцену
     pub fn update(&mut self) {
         self.tick += self.dt;
         self.update_command_from_user_input();
@@ -185,6 +189,28 @@ impl Scene {
         self.dt = get_frame_time();
         self.target_unit.shift = Vec2::new(0., 0.);
 
+        // стрельба и спавн выстрела
+        self.main_unit_shoot();
+
+        // удалить дохлые юниты
+        self.remove_dead_enemy_units();
+       
+        // обновить всех коричневыз
+        self.update_enemy_units();
+
+        // Удаление снарядов на отлете
+        self.remove_projectile_out_of_range();
+
+        // поражение главной мишени
+        self.target_unit_hit();
+
+        // поражение enemy_units
+        self.enemy_units_hit();
+
+    }
+
+    /// стрельба и спавн выстрела
+    fn main_unit_shoot(&mut self) {
         let target_point = if self.target_point.x != 0. || self.target_point.y != 0. {
             self.target_point
         } else {
@@ -192,7 +218,7 @@ impl Scene {
         };
 
         self.main_unit
-            .update(self.dt, target_point, &mut self.command);
+        .update(self.dt, target_point, &mut self.command);
         if self.command.shoot {
             let position = Vec2::new(
                 // точка появления выстрела
@@ -211,26 +237,33 @@ impl Scene {
             );
             self.projectiles.push(projectile);
         }
+    }
 
-        // удалить дохлые юниты
-        self.enemy_units.retain(|u| u.hit_points > 0.);
-
-        // update enemy units
+    /// Обновить все `enemy_units`
+    fn update_enemy_units(&mut self) {
         for i in 0..self.enemy_units.len() {
             let units = self.enemy_units.clone();
             self.enemy_units[i].update(self.dt, self.main_unit.position, units, i);
         }
+    }
 
-        // удаление объектов
-        // снаряды на отлете
+    /// удалить дохлые юниты
+    fn remove_dead_enemy_units(&mut self) {
+        self.enemy_units.retain(|u| u.hit_points > 0.);
+    }
+
+    /// Удаление снарядов на отлете
+    fn remove_projectile_out_of_range(&mut self) {
         self.projectiles.retain(|p| {
             ((p.start_position.x - p.position.x).powf(2f32)
                 + (p.start_position.y - p.position.y).powf(2f32)
                 < self.main_unit.shoot_range.powf(2f32))
                 && p.alive
         });
+    }
 
-        // поражение главной мишени
+    /// поражение главной мишени
+    fn target_unit_hit(&mut self) {
         for i in 0..self.projectiles.len() {
             let p = &mut self.projectiles[i];
 
@@ -245,8 +278,10 @@ impl Scene {
 
             p.update(self.dt);
         }
+    }
 
-        // поражение enemy_units
+    /// поражение enemy_units
+    fn enemy_units_hit(&mut self) {
         for i in 0..self.projectiles.len() {
             let p = &mut self.projectiles[i];
             for j in 0..self.enemy_units.len() {
@@ -272,6 +307,7 @@ impl Scene {
         }
     }
 
+    /// отрисовка
     pub fn draw(&self) {
         self.target_unit.draw_shadow();
         self.main_unit.draw();
