@@ -54,7 +54,7 @@ impl Scene {
         scene
     }
 
-    /// запустить игру. 
+    /// запустить игру.
     fn start(&mut self) {
         // спавн `enemy_units`
         // слево
@@ -128,19 +128,16 @@ impl Scene {
 
     /// Обновить `Command` из URL аргументов
     fn update_command_from_url_query(&mut self) {
-        match get_parameter_value("command") == *"Shoot" {
-            true => {
-                self.restart();
-                self.command.shoot = true;
-                let x = get_parameter_value("target_point_x").parse().unwrap_or(0.);
-                let y = get_parameter_value("target_point_y").parse().unwrap_or(0.);
-                self.target_point = Vec2::new(x, y);
-                info!("{:?}", self.target_point);
-                set_program_parameter("command", "");
-                self.main_unit.shoot_timer = 1.; // чтобы получить выстрел с минимальной задержкой
-                self.main_unit.auto_aim = true;
-            }
-            false => {}
+        if get_parameter_value("command") == *"Shoot" {
+            self.restart();
+            self.command.shoot = true;
+            let x = get_parameter_value("target_point_x").parse().unwrap_or(0.);
+            let y = get_parameter_value("target_point_y").parse().unwrap_or(0.);
+            self.target_point = Vec2::new(x, y);
+            info!("{:?}", self.target_point);
+            set_program_parameter("command", "");
+            self.main_unit.shoot_timer = 1.; // чтобы получить выстрел с минимальной задержкой
+            self.main_unit.auto_aim = true;
         }
 
         match get_parameter_value("rotation").parse::<f32>() {
@@ -196,7 +193,7 @@ impl Scene {
 
         // удалить дохлые юниты
         self.remove_dead_enemy_units();
-       
+
         // обновить всех коричневыз
         self.update_enemy_units();
 
@@ -208,7 +205,6 @@ impl Scene {
 
         // поражение enemy_units
         self.enemy_units_hit();
-
     }
 
     /// стрельба и спавн выстрела
@@ -220,7 +216,7 @@ impl Scene {
         };
 
         self.main_unit
-        .update(self.dt, target_point, &mut self.command);
+            .update(self.dt, target_point, &mut self.command);
         if self.command.shoot {
             let position = Vec2::new(
                 // точка появления выстрела

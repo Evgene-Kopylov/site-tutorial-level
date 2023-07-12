@@ -6,9 +6,9 @@ mod settings;
 use settings::*;
 
 mod assets;
-mod units;
 mod command;
 mod scene;
+mod units;
 mod utils;
 
 use crate::scene::Scene;

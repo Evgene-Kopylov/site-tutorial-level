@@ -2,7 +2,6 @@ use macroquad::audio::{load_sound, Sound};
 use macroquad::prelude::{info, FileError};
 use macroquad::texture::{load_texture, Texture2D};
 
-
 /// Набор ассетов. Текстуры и звуки.
 pub(crate) struct Assets {
     pub(crate) main_unit_texture: Texture2D,
