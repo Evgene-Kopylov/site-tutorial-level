@@ -34,7 +34,7 @@ impl Scene {
         let dt = get_frame_time();
         let assets = Assets::new().await.unwrap();
 
-        Self {
+        let mut scene = Self {
             main_unit: MainUnit::new(assets.main_unit_texture, spawn_position),
             target_unit: TargetUnit::new(
                 assets.target_unit_texture,
@@ -49,12 +49,14 @@ impl Scene {
             command: Command::new(),
             tick: 1000., // большое число, чтобы сразу срабатывало
             target_point: mouse_position,
-        }
+        };
+        scene.start();
+        scene
     }
 
     /// запустить / перезапустить игру. 
     /// здоровье юнитов и позиции будут восстановленны
-    pub fn start_game(&mut self) {
+    fn start(&mut self) {
         // очистить поле
         self.enemy_units = vec![];
 
