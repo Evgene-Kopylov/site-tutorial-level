@@ -34,45 +34,6 @@ impl Scene {
         let dt = get_frame_time();
         let assets = Assets::new().await.unwrap();
 
-        let mut enemy_unit_0 = EnemyUnit::new(
-            assets.enemy_unit_gray,
-            assets.target_unit_shadow_texture,
-            assets.target_impact_sound,
-            target_unit_position,
-        );
-        enemy_unit_0.rotation += f32::to_radians(90.);
-
-        let mut enemy_unit_1 = enemy_unit_0.clone();
-        enemy_unit_1.position.y -= 150.;
-        enemy_unit_1.position.x += 150.;
-        let mut enemy_unit_2 = enemy_unit_0.clone();
-        enemy_unit_2.position.y -= 150.;
-        enemy_unit_2.position.x += 250.;
-
-        let mut enemy_unit_4 = enemy_unit_0.clone();
-        enemy_unit_4.position.x -= 150.;
-        let mut enemy_unit_5 = enemy_unit_0.clone();
-        enemy_unit_5.position.x -= 250.;
-
-        let mut enemy_unit_7 = enemy_unit_0.clone();
-        enemy_unit_7.position.y += 150.;
-        enemy_unit_7.position.x -= 150.;
-        let mut enemy_unit_8 = enemy_unit_0.clone();
-        enemy_unit_8.position.y += 150.;
-        let mut enemy_unit_9 = enemy_unit_0;
-        enemy_unit_9.position.y += 150.;
-        enemy_unit_9.position.x += 150.;
-
-        let enemy_units = vec![
-            enemy_unit_1,
-            enemy_unit_2,
-            enemy_unit_4,
-            enemy_unit_5,
-            enemy_unit_7,
-            enemy_unit_8,
-            enemy_unit_9,
-        ];
-
         Self {
             main_unit: MainUnit::new(assets.main_unit_texture, spawn_position),
             target_unit: TargetUnit::new(
@@ -81,7 +42,7 @@ impl Scene {
                 assets.target_impact_sound,
                 target_unit_position,
             ),
-            enemy_units,
+            enemy_units: Vec::new(),
             projectiles: vec![],
             dt,
             assets,
@@ -89,6 +50,38 @@ impl Scene {
             tick: 1000., // большое число, чтобы сразу срабатывало
             target_point: mouse_position,
         }
+    }
+
+    /// запустить / перезапустить игру. 
+    /// здоровье юнитов и позиции будут восстановленны
+    pub fn start_game(&mut self) {
+        // очистить поле
+        self.enemy_units = vec![];
+
+        // восстановить `target_unit`
+        self.target_unit.hit_points = 100.;
+
+        // слево
+        self.spawn_single_enemy_unit(-100., 0.);
+        self.spawn_single_enemy_unit(-200., 0.);
+        // справа
+        self.spawn_single_enemy_unit(100., 0.);
+        self.spawn_single_enemy_unit(200., 0.);
+        // впереди
+        self.spawn_single_enemy_unit(0., 100.);
+    }
+
+    /// создать enemy_unit по координатам относительно `target_unit`
+    fn spawn_single_enemy_unit(&mut self, dx: f32, dy: f32) {
+        let x = self.target_unit.position.x + dx;
+        let y = self.target_unit.position.y + dy;
+        let unit = EnemyUnit::new(
+            self.assets.enemy_unit_gray,
+            self.assets.target_unit_shadow_texture,
+            self.assets.target_impact_sound,
+            Vec2 { x, y },
+        );
+        self.enemy_units.push(unit);
     }
 
     /// Поймать активность пользователя.

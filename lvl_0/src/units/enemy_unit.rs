@@ -32,7 +32,7 @@ impl EnemyUnit {
             shadow_texture,
             color,
             position: spawn_position,
-            rotation: f32::to_radians(180.0),
+            rotation: f32::to_radians(-90.0),
             radius: texture.width() * 0.5,
             shift: Vec2::new(0., 0.),
             impact_sound,
