@@ -75,6 +75,7 @@ impl Scene {
 
         // восстановить `target_unit`
         self.target_unit.hit_points = 100.;
+        self.target_unit.alive = true;
 
         self.start();
     }
@@ -129,7 +130,7 @@ impl Scene {
     /// Обновить `Command` из URL аргументов
     fn update_command_from_url_query(&mut self) {
         if get_parameter_value("command") == *"Shoot" {
-            self.restart();
+            // self.restart();
             self.command.shoot = true;
             let x = get_parameter_value("target_point_x").parse().unwrap_or(0.);
             let y = get_parameter_value("target_point_y").parse().unwrap_or(0.);
@@ -272,9 +273,12 @@ impl Scene {
                 p.alive = false;
                 self.target_unit.update(true, -20., p.rotation);
                 info!("target_unit.hit_points: {:?}", self.target_unit.hit_points);
+                if self.target_unit.hit_points <= -100. {
+                    self.restart();
+                }
+            } else {
+                p.update(self.dt);
             }
-
-            p.update(self.dt);
         }
     }
 
