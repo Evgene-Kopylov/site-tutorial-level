@@ -1,9 +1,6 @@
-//! юнит под контролем игрока
-
 use crate::command::Command;
 use crate::settings::*;
 use macroquad::prelude::*;
-
 
 pub struct MainUnit {
     pub texture: Texture2D,
@@ -38,18 +35,28 @@ impl MainUnit {
         }
     }
 
-    // Возвращает сигнал о попадании в цель
     pub fn update(&mut self, dt: f32, target_point: Vec2, command: &mut Command) {
         self.shoot_timer += dt;
+        self.update_position(dt, command);
+        self.update_rotation(target_point, command);
+        self.update_shooting(command);
+    }
 
+    pub fn draw(&self) {
+        self.draw_shadow();
+        self.draw_main_unit();
+    }
+
+    fn update_position(&mut self, dt: f32, command: &Command) {
         self.position.x += command.wasd.x * dt * self.speed;
         self.position.y += command.wasd.y * dt * self.speed;
 
         if command.wasd.x != 0. || command.wasd.y != 0. || is_mouse_button_down(MouseButton::Left) {
             self.auto_aim = false;
         }
+    }
 
-        // поворот в сторону курсора
+    fn update_rotation(&mut self, target_point: Vec2, command: &Command) {
         self.rotation %= f32::to_radians(360.);
         let mut dx = self.position.x - target_point.x;
         if dx == 0f32 {
@@ -70,15 +77,14 @@ impl MainUnit {
                 self.rotation = (dy / dx).atan() - f32::to_radians(270.);
             }
         }
+    }
 
-        // Управление огнем
+    fn update_shooting(&mut self, command: &mut Command) {
         if self.shoot_timer >= self.shoot_delay {
             if is_mouse_button_down(MouseButton::Left) {
-                // ЛКМ
                 command.shoot = true;
                 self.bullet_load = 0;
             } else if self.bullet_load > 0 {
-                // очередь
                 command.shoot = true;
                 self.bullet_load -= 1;
             }
@@ -89,10 +95,9 @@ impl MainUnit {
         if command.shoot {
             self.shoot_timer = 0.;
         }
-    }
+    }a
 
-    pub fn draw(&self) {
-        // тень
+    fn draw_shadow(&self) {
         draw_texture_ex(
             self.texture,
             self.position.x - self.size.x * 0.5 + 3.,
@@ -104,7 +109,9 @@ impl MainUnit {
                 ..Default::default()
             },
         );
-        // сам юнит
+    }
+
+    fn draw_main_unit(&self) {
         draw_texture_ex(
             self.texture,
             self.position.x - self.size.x * 0.5,
