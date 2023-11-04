@@ -4,6 +4,7 @@ use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::color::{BLACK, GREEN, WHITE};
 use macroquad::prelude::{draw_texture_ex, Color, DrawTextureParams, Texture2D};
 
+/// Цель, которую игрок должен поражать.
 pub struct TargetUnit {
     pub texture: Texture2D,
     pub shadow_texture: Texture2D,
@@ -17,6 +18,18 @@ pub struct TargetUnit {
 }
 
 impl TargetUnit {
+    /// Создает новую цель.
+    ///
+    /// ### Аргументы
+    ///
+    /// * `texture` - текстура для отрисовки цели.
+    /// * `shadow_texture` - текстура для тени цели.
+    /// * `impact_sound` - звук столкновения.
+    /// * `spawn_position` - начальное положение цели.
+    ///
+    /// ### Возвращаемое значение
+    ///
+    /// Возвращает новый экземпляр структуры TargetUnit.
     pub fn new(
         texture: Texture2D,
         shadow_texture: Texture2D,
@@ -39,8 +52,15 @@ impl TargetUnit {
         }
     }
 
+    /// Обновляет движение цели и обработку столкновений.
+    ///
+    /// ### Аргументы
+    ///
+    /// * `impact` - флаг столкновения.
+    /// * `impact_angle` - угол столкновения.
     pub fn update_movement(&mut self, impact: bool, impact_angle: f32) {
         if impact {
+            // Изменяет параметр hit_points в зависимости от столкновения
             self.hit_points += impact_angle.cos() * 5.0;
 
             if self.hit_points <= 0. {
@@ -56,6 +76,7 @@ impl TargetUnit {
                 TARGET_UNIT_IMPACT_SOUND_VOLUME * 0.25
             };
 
+            // Проигрывает звук столкновения
             audio::play_sound(
                 self.impact_sound,
                 PlaySoundParams {
@@ -66,11 +87,19 @@ impl TargetUnit {
         }
     }
 
+    /// Обновляет цель, включая движение и столкновения.
+    ///
+    /// ### Аргументы
+    ///
+    /// * `impact` - флаг столкновения.
+    /// * `hit_points` - количество урона или восстановления здоровья цели.
+    /// * `impact_angle` - угол столкновения.
     pub fn update(&mut self, impact: bool, hit_points: f32, impact_angle: f32) {
         self.hit_points += hit_points;
         self.update_movement(impact, impact_angle);
     }
 
+    /// Отрисовывает цель.
     pub fn draw(&self) {
         let color = if self.alive { WHITE } else { GREEN };
 
@@ -85,9 +114,11 @@ impl TargetUnit {
         );
     }
 
+    /// Отрисовывает тень цели.
     pub fn draw_shadow(&self) {
-        // тень
+        // Вычисление параметра height для тени
         let height = 3.;
+
         draw_texture_ex(
             self.shadow_texture,
             self.position.x - self.texture.width() * 0.5 + 3. * height,
