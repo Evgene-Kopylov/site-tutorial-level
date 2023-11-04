@@ -5,7 +5,7 @@ use crate::units::enemy_unit::EnemyUnit;
 use crate::units::main_unit::MainUnit;
 use crate::units::projectile::Projectile;
 use crate::units::target_unit::TargetUnit;
-use crate::utils::get_parameter_value;
+use crate::utils::get_command_line_argument;
 use macroquad::audio::{self, PlaySoundParams};
 use macroquad::input::{is_key_down, KeyCode};
 use macroquad::prelude::{info, mouse_position, screen_height, screen_width, Vec2};
@@ -129,11 +129,11 @@ impl Scene {
 
     /// Обновить `Command` из URL аргументов
     fn update_command_from_url_query(&mut self) {
-        if get_parameter_value("command") == *"Shoot" {
+        if get_command_line_argument("command") == *"Shoot" {
             // self.restart();
             self.command.shoot = true;
-            let x = get_parameter_value("target_point_x").parse().unwrap_or(0.);
-            let y = get_parameter_value("target_point_y").parse().unwrap_or(0.);
+            let x = get_command_line_argument("target_point_x").parse().unwrap_or(0.);
+            let y = get_command_line_argument("target_point_y").parse().unwrap_or(0.);
             self.target_point = Vec2::new(x, y);
             info!("{:?}", self.target_point);
             set_program_parameter("command", "");
@@ -141,7 +141,7 @@ impl Scene {
             self.main_unit.auto_aim = true;
         }
 
-        match get_parameter_value("rotation").parse::<f32>() {
+        match get_command_line_argument("rotation").parse::<f32>() {
             Ok(a) => {
                 self.command.rotation = a.to_radians();
             }

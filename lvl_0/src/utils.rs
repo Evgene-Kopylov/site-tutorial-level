@@ -1,6 +1,6 @@
 use quad_url::get_program_parameters;
 
-pub fn get_parameter_value(arg: &str) -> String {
+pub fn get_command_line_argument(arg: &str) -> String {
     let parameters = get_program_parameters();
     for parameter in parameters.iter() {
         if parameter.starts_with("--") {

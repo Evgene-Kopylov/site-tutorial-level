@@ -95,7 +95,7 @@ impl MainUnit {
         if command.shoot {
             self.shoot_timer = 0.;
         }
-    }a
+    }
 
     fn draw_shadow(&self) {
         draw_texture_ex(
