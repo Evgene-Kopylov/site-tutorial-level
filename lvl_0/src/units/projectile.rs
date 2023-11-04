@@ -3,6 +3,7 @@ use macroquad::audio;
 use macroquad::audio::{PlaySoundParams, Sound};
 use macroquad::prelude::*;
 
+/// Проектайл (снаряд), выпущенный игроком.
 pub struct Projectile {
     pub texture: Texture2D,
     pub rotation: f32,
@@ -14,6 +15,19 @@ pub struct Projectile {
 }
 
 impl Projectile {
+    /// Создает новый экземпляр Projectile.
+    ///
+    /// ### Аргументы
+    ///
+    /// * `texture` - текстура проектайла.
+    /// * `shoot_sound` - звук выстрела.
+    /// * `rotation` - угол поворота проектайла.
+    /// * `position` - начальная позиция проектайла.
+    /// * `speed` - скорость проектайла.
+    ///
+    /// ### Возвращаемое значение
+    ///
+    /// Возвращает новый экземпляр структуры Projectile.
     pub fn new(
         texture: Texture2D,
         shoot_sound: Sound,
@@ -41,11 +55,38 @@ impl Projectile {
         }
     }
 
-    pub fn update(&mut self, dt: f32) {
+    /// Обновляет позицию проектайла.
+    ///
+    /// ### Аргументы
+    ///
+    /// * `dt` - шаг времени.
+    pub fn update_position(&mut self, dt: f32) {
         self.position.x += dt * self.speed * (self.rotation - f32::to_radians(90.)).cos();
         self.position.y += dt * self.speed * (self.rotation - f32::to_radians(90.)).sin();
     }
 
+    /// Проверяет, находится ли проектайл в пределах экрана.
+    pub fn is_within_screen_bounds(&self) -> bool {
+        let half_width = self.size.x * 0.5;
+        let half_height = self.size.y * 0.5;
+
+        self.position.x + half_width >= 0.
+            && self.position.x - half_width <= screen_width()
+            && self.position.y + half_height >= 0.
+            && self.position.y - half_height <= screen_height()
+    }
+
+    /// Обновляет состояние проектайла.
+    ///
+    /// ### Аргументы
+    ///
+    /// * `dt` - шаг времени.
+    pub fn update(&mut self, dt: f32) {
+        self.update_position(dt);
+        self.alive = self.alive && self.is_within_screen_bounds();
+    }
+
+    /// Отрисовывает проектайл.
     pub fn draw(&self) {
         draw_texture_ex(
             self.texture,
