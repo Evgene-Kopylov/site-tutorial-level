@@ -1,6 +1,9 @@
+//! юнит под контролем игрока
+
 use crate::command::Command;
 use crate::settings::*;
 use macroquad::prelude::*;
+
 
 pub struct MainUnit {
     pub texture: Texture2D,

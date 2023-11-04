@@ -1,3 +1,5 @@
+//! ассеты с предворительной загрузкой
+
 use macroquad::audio::{load_sound, Sound};
 use macroquad::prelude::{info, FileError};
 use macroquad::texture::{load_texture, Texture2D};
