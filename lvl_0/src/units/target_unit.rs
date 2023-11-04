@@ -39,10 +39,10 @@ impl TargetUnit {
         }
     }
 
-    pub fn update(&mut self, impact: bool, hit_points: f32, impact_angle: f32) {
-        self.hit_points += hit_points;
-
+    pub fn update_movement(&mut self, impact: bool, impact_angle: f32) {
         if impact {
+            self.hit_points += impact_angle.cos() * 5.0;
+
             if self.hit_points <= 0. {
                 self.alive = false;
             }
@@ -50,25 +50,25 @@ impl TargetUnit {
             let shift = 5.;
             self.shift = Vec2::new(shift * impact_angle.sin(), shift * impact_angle.cos());
 
-            if self.alive {
-                audio::play_sound(
-                    self.impact_sound,
-                    PlaySoundParams {
-                        volume: TARGET_UNIT_IMPACT_SOUND_VOLUME,
-                        ..Default::default()
-                    },
-                );
+            let volume = if self.alive {
+                TARGET_UNIT_IMPACT_SOUND_VOLUME
             } else {
-                self.shift *= 0.4;
-                audio::play_sound(
-                    self.impact_sound,
-                    PlaySoundParams {
-                        volume: TARGET_UNIT_IMPACT_SOUND_VOLUME * 0.25,
-                        ..Default::default()
-                    },
-                );
-            }
+                TARGET_UNIT_IMPACT_SOUND_VOLUME * 0.25
+            };
+
+            audio::play_sound(
+                self.impact_sound,
+                PlaySoundParams {
+                    volume,
+                    ..Default::default()
+                },
+            );
         }
+    }
+
+    pub fn update(&mut self, impact: bool, hit_points: f32, impact_angle: f32) {
+        self.hit_points += hit_points;
+        self.update_movement(impact, impact_angle);
     }
 
     pub fn draw(&self) {
