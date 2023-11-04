@@ -2,6 +2,7 @@ use crate::command::Command;
 use crate::settings::*;
 use macroquad::prelude::*;
 
+/// Основной юнит, под контролем игрока.
 pub struct MainUnit {
     pub texture: Texture2D,
     pub size: Vec2,
@@ -18,6 +19,16 @@ pub struct MainUnit {
 }
 
 impl MainUnit {
+    /// Создает новый экземпляр MainUnit.
+    ///
+    /// ### Аргументы
+    ///
+    /// * `texture` - текстура для отрисовки юнита.
+    /// * `position` - начальное положение юнита.
+    ///
+    /// ### Возвращаемое значение
+    ///
+    /// Возвращает новый экземпляр структуры MainUnit.
     pub fn new(texture: Texture2D, position: Vec2) -> Self {
         Self {
             texture,
@@ -35,6 +46,13 @@ impl MainUnit {
         }
     }
 
+    /// Обновляет состояние юнита.
+    ///
+    /// ### Аргументы
+    ///
+    /// * `dt` - шаг времени.
+    /// * `target_point` - позиция цели.
+    /// * `command` - команда для управления юнитом.
     pub fn update(&mut self, dt: f32, target_point: Vec2, command: &mut Command) {
         self.shoot_timer += dt;
         self.update_position(dt, command);
@@ -42,11 +60,13 @@ impl MainUnit {
         self.update_shooting(command);
     }
 
+    /// Отрисовывает юнит.
     pub fn draw(&self) {
         self.draw_shadow();
         self.draw_main_unit();
     }
 
+    /// Обновляет позицию юнита.
     fn update_position(&mut self, dt: f32, command: &Command) {
         self.position.x += command.wasd.x * dt * self.speed;
         self.position.y += command.wasd.y * dt * self.speed;
@@ -56,6 +76,7 @@ impl MainUnit {
         }
     }
 
+    /// Обновляет угол поворота юнита.
     fn update_rotation(&mut self, target_point: Vec2, command: &Command) {
         self.rotation %= f32::to_radians(360.);
         let mut dx = self.position.x - target_point.x;
@@ -79,6 +100,7 @@ impl MainUnit {
         }
     }
 
+    /// Обновляет стрельбу юнита.
     fn update_shooting(&mut self, command: &mut Command) {
         if self.shoot_timer >= self.shoot_delay {
             if is_mouse_button_down(MouseButton::Left) {
@@ -97,6 +119,7 @@ impl MainUnit {
         }
     }
 
+    /// Отрисовывает тень юнита.
     fn draw_shadow(&self) {
         draw_texture_ex(
             self.texture,
@@ -111,6 +134,7 @@ impl MainUnit {
         );
     }
 
+    /// Отрисовывает главный объект юнита.
     fn draw_main_unit(&self) {
         draw_texture_ex(
             self.texture,
