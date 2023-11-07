@@ -55,3 +55,4 @@ dist/**/*
 
 # ignore yarn.lock
 yarn.lock
+project_code.md
