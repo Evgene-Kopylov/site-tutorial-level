@@ -46,7 +46,7 @@ with open(md_filename, "w", encoding="utf-8") as md_file:
                 code = python_file.read()
                 md_file.write(f"```python\n# {file}\n{code}\n```\n")
             except:
-                print("SKIP", file)
+                print("SKIP", file.split('.')[-1] if file.split('.') else '')
 
 print(f"Собраны файлы в {md_filename}")
 
