@@ -90,7 +90,6 @@
             border: none;
         }
 
-        .tests,
         #output {
             min-height: var(--bot-cell-min-heigt);
         }
@@ -116,7 +115,10 @@
             </td>
             <td>
                 <div>
-                    <!-- clean the output section -->
+                    <!-- run button to pass the code to pyodide.runPython() -->
+                    <button type="button" class="btn btn-dark btn-ide" onclick="showGameWindow(); evaluatePython();">
+                        ▶︎ Тест
+                    </button>
                     <button type="button" class="btn btn-dark btn-ide" onclick="clearHistory()">Python <span
                             id="python_version">3</span></button>
                 </div>
@@ -172,15 +174,6 @@
                 <div class="ide-code">
                     <textarea id="code" name="code" class="h-full"></textarea>
                 </div>
-                <div class="tests">
-                    <!-- run button to pass the code to pyodide.runPython() -->
-                    <button type="button" class="btn btn-dark btn-ide" onclick="showGameWindow(); evaluatePython();">
-                        ▶︎ Тест
-                    </button>
-                    <!-- clean the output section -->
-                    <!--            <button class="btn btn-dark btn-ide" onclick="clearHistory()" type="button">CLS</button>-->
-                </div>
-
             </td>
 
         </tr>
