@@ -153,3 +153,8 @@ print(target)
     addToOutput(err);
   }
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  window.scrollTo(0, 0); // Прокрутка вверх при загрузке страницы
+});
